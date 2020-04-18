@@ -22,7 +22,7 @@ exports.up = function(knex) {
                 .onUpdate('SET NULL')
                 .notNullable();
             tbl.integer('resource_id')
-                .unsigned()
+                // .unsigned()
                 .references('id')
                 .inTable('resources')
                 .onDelete('SET NULL')
@@ -35,7 +35,6 @@ exports.up = function(knex) {
             tbl.string('notes', 2048);
             tbl.boolean('completed').defaultTo('false').notNullable();
             tbl.integer('project_id')
-                .unsigned()
                 .references('id')
                 .inTable('projects')
                 .onDelete('SET NULL')
