@@ -28,6 +28,24 @@ Projects.addProject(projectData)
     });
 });
 
+router.get('/entire/:id', (req, res) => {
+    const { id } = req.params;
+
+
+    Projects.findProjectById(id)
+        .then(project => {
+        if (project) {
+            res.json(project);
+        } else {
+            res.status(404).json({ message: 'Could not find project with given id.' })
+        }
+    })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get project...' });
+    });
+});
+
+
 router.post('/resources', (req, res) => {
     const resourceData = req.body;
     
@@ -65,6 +83,18 @@ router.post('/tasks', (req, res) => {
 
 router.get('/tasks', (req, res) => {
     Projects.findTasks()
+        .then(tasks => {
+            res.json(tasks);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get tasks' });
+    });
+});
+
+router.get('/tasks/:id', (req, res) => {
+    const { id } = req.params;
+
+    Projects.findTasksById(id)
         .then(tasks => {
             res.json(tasks);
         })
