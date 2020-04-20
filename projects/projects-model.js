@@ -6,25 +6,28 @@ function findProjects() {
 
 function findProjectById(id){
     return db('projects as p')
-        .where({ 'p.id':id })
-        .then(project => {
-            const tasks = findTasksById(id)
-            return ( {project, tasks}
-            )
-        })
+        .where({ id })
+        .then(projects => {
+            return findTasksById(id)
+            .then(resTasks => {
+                console.log('projects', projects)
+                const withTasks = {...projects, tasks: resTasks}
 
+                // const final = dbResponse.concat(tasks)
+                return withTasks
+            })       
+        })
     }
 
+    //takes in the project id and return tasks
 function findTasksById(id){
     return db('tasks')
-        .join('tasks as t', 't.project_id', 'p.id')
-        .where( {'t.project_id': id })
+        .where( {'project_id': id })
 }
 
 function findResourcesById(id){
     return db('resources')
-        .where( {id} )
-        .first();
+    .where( {'project_id': id })
 }
 
 function addProject(project) {

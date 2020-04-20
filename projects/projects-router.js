@@ -31,7 +31,6 @@ Projects.addProject(projectData)
 router.get('/entire/:id', (req, res) => {
     const { id } = req.params;
 
-
     Projects.findProjectById(id)
         .then(project => {
         if (project) {
@@ -41,7 +40,7 @@ router.get('/entire/:id', (req, res) => {
         }
     })
         .catch(err => {
-            res.status(500).json({ message: 'Failed to get project...' });
+            res.status(500).json({ message: 'Failed to get project...', err });
     });
 });
 
