@@ -10,11 +10,15 @@ function findProjectById(id){
         .then(projects => {
             return findTasksById(id)
             .then(resTasks => {
-                console.log('projects', projects)
                 const withTasks = {...projects, tasks: resTasks}
+                console.log('withtasks', withTasks)
+                return findProjectResourcesById(id)
+                    .then(resResources => {
+                        console.log('resources', resResources)
+                        const withResources = {...withTasks, resources: resResources}
+                        return withResources
+                    })
 
-                // const final = dbResponse.concat(tasks)
-                return withTasks
             })       
         })
     }
@@ -30,6 +34,13 @@ function findResourcesById(id){
     .where( {'project_id': id })
 }
 
+function findProjectResourcesById(id){
+    return db('project_resources as pr')
+        .join('resources as r', 'r.id', 'pr.resource_id')
+        .select('r.name', 'r.description')
+        .where( {'pr.project_id': id })
+}
+
 function addProject(project) {
     return db('projects').insert(project)
 }
@@ -38,8 +49,16 @@ function addResource(resource) {
     return db('resources').insert(resource)
 }
 
+function addProjectResource(resource) {
+    return db('project_resources').insert(resource)
+}
+
 function findResources() {
     return db('resources');
+}
+
+function findProjectResources() {
+    return db('project_resources');
 }
 
 function addTask(task) {
@@ -55,6 +74,9 @@ module.exports = {
     findProjectById,
     findTasksById,
     findResourcesById,
+    findProjectResourcesById,
+    findProjectResources,
+    addProjectResource,
     addProject,
     addResource,
     findResources,

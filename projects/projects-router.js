@@ -57,9 +57,30 @@ router.post('/resources', (req, res) => {
      });
 });
 
+router.post('/project_resources', (req, res) => {
+    const resourceData = req.body;
+    
+    Projects.addProjectResource(resourceData)
+        .then(resource => {
+            res.status(201).json(resource);
+        })
+        .catch (err => {
+            res.status(500).json({ message: 'Failed to create new resource' });
+     });
+});
 
 router.get('/resources', (req, res) => {
     Projects.findResources()
+        .then(resources => {
+            res.json(resources);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get resources' });
+    });
+});
+
+router.get('/project_resources', (req, res) => {
+    Projects.findProjectResources()
         .then(resources => {
             res.json(resources);
         })
@@ -99,6 +120,18 @@ router.get('/tasks/:id', (req, res) => {
         })
         .catch(err => {
             res.status(500).json({ message: 'Failed to get tasks' });
+    });
+});
+
+router.get('/project_resources/:id', (req, res) => {
+    const { id } = req.params;
+
+    Projects.findProjectResourcesById(id)
+        .then(tasks => {
+            res.json(tasks);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'Failed to get resources' });
     });
 });
 
